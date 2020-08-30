@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+
+<title>Sales Forecast</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh.min.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-widgets.css"
+    rel="stylesheet" type="text/css">
+<link
+    href="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-tables.css"
+    rel="stylesheet" type="text/css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>      
+    
+
+<style>
+html,body,h1,h2,h3,h4 {font-family:"Lato", sans-serif}
+.mySlides {display:none}
+.w3-tag, .fa {cursor:pointer}
+.w3-tag {height:15px;width:15px;padding:0;margin-top:6px}
+
+#wrapper{position:relative;}
+#canvas1{position:absolute; border:1px solid red;}
+#canvas2{position:absolute; border:1px solid blue;}
+
+.canvas-container, .top-container{height: 500px; position: relative;}
+.canvas-chart,.chart-c{opacity: 0; position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); z-index: 0;}
+.canvas-chart.isactive, .chart-c.isactive{opacity: 1; z-index: 1;}
+.trigger-show{width: 12.5%;}
+
+.lblChange {
+  border-radius: 10px;
+  color: #FFFFFF;
+  font-family: Open Sans;
+  font-size: 20px;
+  font-weight: 100;
+  padding: 10px;
+  background-color: #3D94F6;
+  box-shadow: 1px 1px 20px 0px #000000;
+  text-shadow: 1px 1px 20px #000000;
+  border: solid #337FED 1px;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.lblChange:hover {
+  background: #1E62D0;
+  background-image: linear-gradient(to bottom, #1E62D0, #3D94F6);
+  text-decoration: none;
+}
+</style>
+</head>
+<body>
+
+<!-- Links (sit on top) -->
+<div class="w3-top">
+  <div class="w3-row w3-large w3-light-grey">
+    <div class="w3-col s3">
+      <a href="#" class="w3-button w3-block">Home</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="#plans" class="w3-button w3-block">Sales</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="#about" class="w3-button w3-block">Item</a>
+    </div>
+    <div class="w3-col s3">
+      <a href="#contact" class="w3-button w3-block">Contact</a>
+    </div>
+  </div>
+</div>
+
+<!-- Content -->
+<div class="w3-content" style="max-width:1100px;margin-top:80px;margin-bottom:80px">
+
+  <div class="w3-panel">
+    <h1><b>Restaurant Sales Forecast</b></h1>
+    
+  </div>
+
+  <!-- Slideshow -->
+  <div class="w3-container">
+    <div class="w3-display-container mySlides">
+      <img src="../static/images/slide1.jpg" style="width:100%">
+      <div class="w3-display-topleft w3-container w3-padding-32">
+        <span class="w3-white w3-padding-large w3-animate-bottom">Lunch Thali</span>
+      </div>
+    </div>
+    <div class="w3-display-container mySlides">
+      <img src="../static/images/slide2.jpg" style="width:100%">
+      <div class="w3-display-middle w3-container w3-padding-32">
+        <span class="w3-white w3-padding-large w3-animate-bottom">Roti Curry</span>
+      </div>
+    </div>
+    <div class="w3-display-container mySlides">
+      <img src="../static/images/slide3.jpg" style="width:100%">
+      <div class="w3-display-topright w3-container w3-padding-32">
+        <span class="w3-white w3-padding-large w3-animate-bottom">Dal Fry</span>
+      </div>
+    </div>
+
+    <!-- Slideshow next/previous buttons -->
+    <div class="w3-container w3-dark-grey w3-padding w3-xlarge">
+      <div class="w3-left" onclick="plusDivs(-1)"><i class="fa fa-arrow-circle-left w3-hover-text-teal"></i></div>
+      <div class="w3-right" onclick="plusDivs(1)"><i class="fa fa-arrow-circle-right w3-hover-text-teal"></i></div>
+    
+      <div class="w3-center">
+        <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(1)"></span>
+        <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(2)"></span>
+        <span class="w3-tag demodots w3-border w3-transparent w3-hover-white" onclick="currentDiv(3)"></span>
+      </div>
+    </div>
+  </div>
+  <!-- Grid -->
+  
+
+  <!-- Grid -->
+  <div class="w3-row-padding" id="plans">
+    <div class="w3-center w3-padding-64">
+      <h2><b>Daily Sales</b></h2>
+    </br>
+      <center><button class="lblChange" onclick="toggleDiv()">Click for Forecast</button></center>
+    <div class="top-container">
+      <center class="chart-c chart-2">
+        
+        <canvas class="chart" id="chart" width="800" height="300"></canvas>
+        
+        <script>
+          // bar chart data
+          var barData = {
+            labels : [
+              {% for item in fDate %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [{
+              label: "{{fSalesLegend}}",
+              fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [
+                {% for item in fSales %}
+                   "{{ item }}",
+                  {% endfor %}
+          ]}
+            ]
+          }
+    
+         // get bar chart canvas
+         var mychart = document.getElementById("chart").getContext("2d");
+    
+           steps = 10
+           max = 400000
+    
+         // draw bar chart
+         new Chart(mychart).Bar(barData, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+      </center>
+      <center class="chart-c chart-1 isactive">
+        
+        <canvas class="chart2" id="chart2" width="900" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData = {
+            labels : [
+              {% for item in labels %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [{
+            fillColor: "rgba(151,187,205,0.2)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              label: "Actual Sales",
+              data : [
+                {% for item in actual %}
+                   "{{ item }}",
+                  {% endfor %}
+          ] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.1)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              label: "Model Predicted Sales",
+              data : [
+                {% for item in predicted %}
+                   "{{ item }}",
+                  {% endfor %}
+          ]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart = document.getElementById("chart2").getContext("2d");
+    
+           steps = 10
+           max = 400000
+    
+         // draw line chart
+         new Chart(mychart).Line(lineData, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+      </center>
+    </div>
+  </div>
+  
+  </div>
+
+  <!-- Grid -->
+  <div class="w3-row-padding" id="about">
+    <div class="w3-center w3-padding-64">
+      <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">{{titleItem}}</span>
+    </div>
+
+    <div>
+      <center>
+        <ul class="nav nav-tabs">
+          <li class="trigger-show ts-2 active" ><a>Lunch Deal</a></li>
+          <li class="trigger-show ts-3" ><a >Evening Snack</a></li>
+          <li class="trigger-show ts-4" ><a >Tea / Coffee</a></li>
+          <li class="trigger-show ts-5" ><a >Ice Cream</a></li>
+          <li class="trigger-show ts-6" ><a >Breakfast-1</a></li>
+          <li class="trigger-show ts-7" ><a >Fruit Juice</a></li>
+          <li class="trigger-show ts-8" ><a >Breakfast-2</a></li>
+          <li class="trigger-show ts-9" ><a >Lunch</a></li>
+        </ul>
+        
+      </center>
+      <center class="canvas-container">
+        
+        <canvas id="chart4" class="canvas-chart canvas-chart-2 isactive" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData1 = {
+            labels : [
+              {% for item in itemSalesDate %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [{
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              label: "Actual Sales - Item 1",
+              data : [{% for item in iBO_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              label: "Predicted Sales - Item 1",
+              data : [
+                {% for item in iBO_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              label: "Forecast Sales - Item",
+              data : [
+                {% for item in iBO_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart1 = document.getElementById("chart4").getContext("2d");
+    
+           steps = 10
+           max = 750
+    
+         // draw line chart
+         new Chart(mychart1).Bar(lineData1, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart5" class="canvas-chart canvas-chart-3" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData2 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              label:'Actual Sales - Item 2',
+              data : [{% for item in iC_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              label: 'Predicted Sales - Item 2',
+              data : [
+                {% for item in iC_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              label:'Forecast Sales - Item 2',
+              data : [
+                {% for item in iC_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart2 = document.getElementById("chart5").getContext("2d");
+    
+           steps = 10
+           max = 500
+    
+         // draw line chart
+         new Chart(mychart2).Bar(lineData2, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart6" class="canvas-chart canvas-chart-4" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData3 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              label:'Actual Sales - Item 3',
+              data : [{% for item in iHB_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              label: 'Predicted Sales - Item 3',
+              data : [
+                {% for item in iHB_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              label:'Forecast Sales - Item 3',
+              data : [
+                {% for item in iHB_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart3 = document.getElementById("chart6").getContext("2d");
+    
+           steps = 5
+           max = 2500
+    
+         // draw line chart
+         new Chart(mychart3).Bar(lineData3, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart7" class="canvas-chart canvas-chart-5" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData4 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [{% for item in iCC_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              data : [
+                {% for item in iCC_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              data : [
+                {% for item in iCC_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart4 = document.getElementById("chart7").getContext("2d");
+    
+           steps = 10
+           max = 1000
+    
+         // draw line chart
+         new Chart(mychart4).Bar(lineData4, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart8" class="canvas-chart canvas-chart-6" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData5 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [{% for item in iI_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              data : [
+                {% for item in iI_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              data : [
+                {% for item in iI_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart5 = document.getElementById("chart8").getContext("2d");
+    
+           steps = 10
+           max = 400
+    
+         // draw line chart
+         new Chart(mychart5).Bar(lineData5, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart9" class="canvas-chart canvas-chart-7" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData6 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [{% for item in iJ_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              data : [
+                {% for item in iJ_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              data : [
+                {% for item in iJ_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart6 = document.getElementById("chart9").getContext("2d");
+    
+           steps = 10
+           max = 100
+    
+         // draw line chart
+         new Chart(mychart6).Bar(lineData6, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart10" class="canvas-chart canvas-chart-8" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData7 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [{% for item in iMD_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              data : [
+                {% for item in iMD_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              data : [
+                {% for item in iMD_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart7 = document.getElementById("chart10").getContext("2d");
+    
+           steps = 10
+           max = 500
+    
+         // draw line chart
+         new Chart(mychart7).Bar(lineData7, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+    
+        </script>
+        <canvas id="chart11" class="canvas-chart canvas-chart-9" width="800" height="300"></canvas>
+        <script>
+          // line chart data
+          var lineData8 = {
+            labels : [
+              {% for item in iLabel %}
+               "{{ item }}",
+              {% endfor %}
+      ],
+    
+            datasets : [
+          {
+            fillColor: "rgba(151,187,205,0.6)",
+              strokeColor: "rgba(151,187,205,1)",
+              pointColor: "rgba(151,187,205,1)",
+              data : [{% for item in iSM_A %}
+                   "{{ item }}",
+                  {% endfor %}] 
+          },
+          {
+            fillColor: "rgba(255, 0, 0, 0.3)",
+              strokeColor: "rgba(255, 0, 0, 0.8)",
+              pointColor: "rgba(255, 0, 0, 0.8)",
+              data : [
+                {% for item in iSM_P %}
+                   "{{ item }}",
+                  {% endfor %}]
+          },
+          {
+            fillColor: "rgba(184, 134, 11, 1)",
+              strokeColor: "rgba(184, 134, 11, 0.8)",
+              pointColor: "rgba(184, 134, 11, 0.8)",
+              data : [
+                {% for item in iSM_F %}
+                   "{{ item }}",
+                  {% endfor %}]
+          }
+            ]
+          }
+    
+         // get line chart canvas
+         var mychart8 = document.getElementById("chart11").getContext("2d");
+    
+           steps = 10
+           max = 200
+    
+         // draw line chart
+         new Chart(mychart8).Bar(lineData8, {
+           scaleOverride: true,
+           scaleSteps: steps,
+           scaleStepWidth: Math.ceil(max / steps),
+           scaleStartValue: 0,
+           scaleShowVerticalLines: true,
+           scaleShowGridLines : true,
+           barShowStroke : true,
+           scaleShowLabels: true
+           }
+         );
+        </script>
+      </center>
+    </div>
+
+  </div>
+
+  <!-- Contact -->
+  <div class="w3-center w3-padding-64" id="contact">
+    <span class="w3-xlarge w3-bottombar w3-border-dark-grey w3-padding-16">Contact Us</span>
+  </div>
+  <div class="w3-row">
+    <div class="w3-col" style="width:20%"><p>20%</p></div>
+    <div class="w3-col" style="width:20%"><p>20%</p></div>
+    <div class="w3-col" style="width:20%"><p>20%</p></div>
+    <div class="w3-col" style="width:20%"><p>20%</p></div>
+    <div class="w3-col" style="width:20%"><p>20%</p></div>
+  </div>
+  <form class="w3-container" action="/action_page.php" target="_blank">
+    <div class="w3-section">
+      <label>Name</label>
+      <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" type="text" name="Name" required>
+    </div>
+    <div class="w3-section">
+      <label>Email</label>
+      <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" type="text" name="Email" required>
+    </div>
+    <div class="w3-section">
+      <label>Subject</label>
+      <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" name="Subject" required>
+    </div>
+    <div class="w3-section">
+      <label>Message</label>
+      <input class="w3-input w3-border w3-hover-border-black" style="width:100%;" name="Message" required>
+    </div>
+    <button type="submit" class="w3-button w3-block w3-black">Send</button>
+  </form>
+
+</div>
+
+<!-- Footer -->
+
+<footer class="w3-container w3-padding-32 w3-light-grey w3-center">
+  <h4>Footer</h4>
+  <a href="#" class="w3-button w3-black w3-margin"><i class="fa fa-arrow-up w3-margin-right"></i>To the top</a>
+  <div class="w3-xlarge w3-section">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+  </div>
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" title="W3.CSS" target="_blank" class="w3-hover-text-green">w3.css</a></p>
+</footer>
+
+
+<script>
+// Slideshow
+var slideIndex = 1;
+showDivs(slideIndex);
+
+function plusDivs(n) {
+  showDivs(slideIndex += n);
+}
+
+function currentDiv(n) {
+  showDivs(slideIndex = n);
+}
+
+function showDivs(n) {
+  var i;
+  var x = document.getElementsByClassName("mySlides");
+  var dots = document.getElementsByClassName("demodots");
+  if (n > x.length) {slideIndex = 1}    
+  if (n < 1) {slideIndex = x.length} ;
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";  
+  }
+  for (i = 0; i < dots.length; i++) {
+    dots[i].className = dots[i].className.replace(" w3-white", "");
+  }
+  x[slideIndex-1].style.display = "block";  
+  dots[slideIndex-1].className += " w3-white";
+}
+
+function toggleDiv() {
+  var chartCanvas = $('.chart-1');
+  var chart2Canvas = $('.chart-2');
+  
+  if(chartCanvas.hasClass("isactive")){
+    chartCanvas.removeClass("isactive");
+    chart2Canvas.addClass("isactive");
+  }else{
+    chartCanvas.addClass("isactive");
+    chart2Canvas.removeClass("isactive");
+  }
+}
+
+$(function(){
+  $('.trigger-show').on('click', function(){
+    $('.canvas-chart').removeClass('isactive');
+    $('.trigger-show').removeClass('active');
+    $(this).addClass('active');
+
+    if($(this).hasClass('ts-1')){
+      $('.canvas-chart-1').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-2')){
+      $('.canvas-chart-2').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-3')){
+      $('.canvas-chart-3').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-4')){
+      $('.canvas-chart-4').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-5')){
+      $('.canvas-chart-5').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-6')){
+      $('.canvas-chart-6').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-7')){
+      $('.canvas-chart-7').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-8')){
+      $('.canvas-chart-8').addClass('isactive');
+    }
+
+    if($(this).hasClass('ts-9')){
+      $('.canvas-chart-9').addClass('isactive');
+    }
+
+  });
+});
+</script>
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-widgets.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bokeh/1.2.0/bokeh-tables.js"></script>
+
+</html>
