@@ -4,7 +4,7 @@ To get a demo of this application on your local server please follow the follwin
 
 ## 1. Requirements:
 1. Install 'git' visit and follow instruction to install git: https://git-scm.com/downloads \
-It is essential to clone this git repository to your local system.
+It is essential to clone this git repository to your local system. \ OR \ run the command - conda install -c anaconda git
 2. conda environment is required to be pre installed.
 3. pip install virtualenv - if it is not available.
 
