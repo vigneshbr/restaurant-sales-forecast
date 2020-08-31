@@ -4,9 +4,9 @@ To get a demo of this application on your local server please follow the follwin
 
 ## 1. Requirements:
 1. Install 'git' visit and follow instruction to install git: https://git-scm.com/downloads \
-It is essential to clone this git repository to your local system.
-
-2. conda environment is required to be pre installed.
+It is essential to clone this git repository to your local system. \
+2. conda environment is required to be pre installed. \
+3. <pip install virtualenv> if it is not available.
 
 ## 2. Running the app locally
 
@@ -28,7 +28,7 @@ Run the following commands:
 The above commands should be able to clone to this repository and a copy would be available in your local system. Also, all the modules required for this app would be installed.
 
 Furthur, If you face any error like: \
-*ModuleNotFoundError: No module named '<module_name>'
+ModuleNotFoundError: No module named '<module_name>'
 
 Please- 
 * pip istall <module_name>\
